@@ -4,6 +4,7 @@ on:
     branches:
       - testnet
       - dev
+      - main
 jobs:
   main:
     runs-on: ubuntu-latest
