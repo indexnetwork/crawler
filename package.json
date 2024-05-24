@@ -1,0 +1,16 @@
+{
+  "name": "apify-crawler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "apify": "^3.2.0",
+    "crawlee": "^3.10.1",
+    "express": "^4.19.2",
+    "puppeteer": "^22.9.0"
+  }
+}
