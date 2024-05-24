@@ -10,12 +10,14 @@ app.use(express.urlencoded({ extended: true }));
 
 await Actor.init();
 
-const initQueue = async () => {
+const contentMap = new Map(); // Map to store the page content based on request id
+
+const initializeCrawler = async () => {
   const requestList = await RequestList.open("my-list", [], {
     keepDuplicateUrls: true,
   });
-
   const requestQueue = await Actor.openRequestQueue();
+
   const crawler = new PuppeteerCrawler({
     requestList,
     requestQueue,
@@ -31,19 +33,32 @@ const initQueue = async () => {
     },
     requestHandler: async ({ request, page }) => {
       await page.waitForNetworkIdle();
-      const title = await page.title();
-      // scroll 2-3 screen
-      // set viewport
-      console.log(title);
       const content = await page.content();
-      console.log(content);
+      console.log(`Title: ${await page.title()}`);
+      console.log(`Content: ${content}`);
+      contentMap.set(request.uniqueKey, content); // Store content with uniqueKey
       await requestQueue.markRequestHandled(request);
     },
   });
 
   crawler.run();
-
   return crawler;
+};
+
+const addToQueue = async (queue, url, uniqueKey) => {
+  await queue.addRequests([{ url, uniqueKey }]);
+};
+
+const getContent = async (uniqueKey, maxRetries = 10, delay = 1000) => {
+  for (let i = 0; i < maxRetries; i++) {
+    if (contentMap.has(uniqueKey)) {
+      const content = contentMap.get(uniqueKey);
+      contentMap.delete(uniqueKey); // Clean up the map
+      return content;
+    }
+    await sleep(delay); // wait before retrying
+  }
+  throw new Error("Failed to fetch the content in time");
 };
 
 app.post("/", async (req, res) => {
@@ -54,25 +69,29 @@ app.post("/", async (req, res) => {
     }
 
     const queue = req.app.get("queue");
+    const uniqueKey = Math.random().toString();
     console.log(`Adding URL to queue: ${url}`);
-    await queue.addRequests([{ url, uniqueKey: Math.random().toString() }]);
-    return res.json({ url });
+
+    await addToQueue(queue, url, uniqueKey);
+    const content = await getContent(uniqueKey);
+
+    return res.json({ url, content });
   } catch (error) {
-    console.error("Error adding request to queue:", error);
+    console.error("Error processing request:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 });
 
-const run = async () => {
+const startServer = async () => {
   try {
-    app.set("queue", await initQueue());
+    app.set("queue", await initializeCrawler());
     app.listen(port, () => {
       console.log(`Server is running on http://localhost:${port}`);
     });
   } catch (error) {
-    console.error("Error initializing queue:", error);
+    console.error("Error initializing server:", error);
     process.exit(1);
   }
 };
 
-run();
+startServer();
