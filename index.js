@@ -32,6 +32,8 @@ const initQueue = async () => {
     requestHandler: async ({ request, page }) => {
       await page.waitForNetworkIdle();
       const title = await page.title();
+      // scroll 2-3 screen
+      // set viewport
       console.log(title);
       const content = await page.content();
       console.log(content);
@@ -44,9 +46,9 @@ const initQueue = async () => {
   return crawler;
 };
 
-app.get("/", async (req, res) => {
+app.post("/", async (req, res) => {
   try {
-    const { url } = req.query;
+    const { url } = req.body;
     if (!url) {
       return res.status(400).json({ error: "URL query parameter is required" });
     }
