@@ -40,14 +40,16 @@ const initializeCrawler = async () => {
     requestHandler: async ({ request, page }) => {
       await page.waitForNetworkIdle();
 
-      await Promise.all([
-        page
-          .evaluate(() => window.scrollBy(0, window.innerHeight))
-          .then(() => page.waitForTimeout(152)),
-        page
-          .evaluate(() => window.scrollBy(0, window.innerHeight))
-          .then(() => page.waitForTimeout(204)),
-      ]);
+      await page.evaluate(() => {
+        return window.scrollBy(0, window.innerHeight);
+      });
+      await sleep(152);
+
+      await page.evaluate(() => {
+        return window.scrollBy(0, window.innerHeight);
+      });
+
+      await sleep(263);
 
       const content = await page.content();
       console.log(`Title: ${await page.title()}`);
