@@ -28,11 +28,27 @@ const initializeCrawler = async () => {
     minConcurrency: 5,
     maxConcurrency: 15,
     launchContext: {
+      launchOptions: {
+        defaultViewport: {
+          width: 1512,
+          height: 982,
+        },
+      },
       userAgent:
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
     },
     requestHandler: async ({ request, page }) => {
       await page.waitForNetworkIdle();
+
+      await Promise.all([
+        page
+          .evaluate(() => window.scrollBy(0, window.innerHeight))
+          .then(() => page.waitForTimeout(152)),
+        page
+          .evaluate(() => window.scrollBy(0, window.innerHeight))
+          .then(() => page.waitForTimeout(204)),
+      ]);
+
       const content = await page.content();
       console.log(`Title: ${await page.title()}`);
       console.log(`Content: ${content}`);
@@ -49,7 +65,7 @@ const addToQueue = async (queue, url, uniqueKey) => {
   await queue.addRequests([{ url, uniqueKey }]);
 };
 
-const getContent = async (uniqueKey, maxRetries = 10, delay = 1000) => {
+const getContent = async (uniqueKey, maxRetries = 20, delay = 1000) => {
   for (let i = 0; i < maxRetries; i++) {
     if (contentMap.has(uniqueKey)) {
       const content = contentMap.get(uniqueKey);
