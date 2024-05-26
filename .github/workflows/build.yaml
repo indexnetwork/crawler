@@ -2,9 +2,8 @@ name: Crawler Build & Deploy
 on:
   push:
     branches:
-      - testnet
       - dev
-      - main
+      - mainnet
 jobs:
   main:
     runs-on: ubuntu-latest
