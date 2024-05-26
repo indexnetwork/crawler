@@ -38,7 +38,9 @@ const initializeCrawler = async () => {
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
     },
     requestHandler: async ({ request, page }) => {
-      await page.waitForNetworkIdle();
+      await page.waitForNavigation({ waitUntil: "load" });
+
+      await sleep(2000);
 
       await page.evaluate(() => {
         return window.scrollBy(0, window.innerHeight);
