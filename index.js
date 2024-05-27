@@ -36,7 +36,12 @@ const initializeCrawler = async () => {
         }
       });
 
-      //sleep(60000);
+      await Promise.race([
+        page.waitForNetworkIdle({ idleTime: 500, concurrency: 3 }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Timeout")), 10000),
+        ),
+      ]);
 
       await page.evaluate(() => {
         return window.scrollBy(0, window.innerHeight);
@@ -53,7 +58,7 @@ const initializeCrawler = async () => {
       console.log(`Title: ${await page.title()}`);
       console.log(`Content: ${content}`);
       contentMap.set(request.uniqueKey, content); // Store content with uniqueKey
-      //await requestQueue.markRequestHandled(request);
+      await requestQueue.markRequestHandled(request);
     },
   });
 
