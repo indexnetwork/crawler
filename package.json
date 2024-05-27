@@ -11,6 +11,6 @@
     "apify": "^3.2.0",
     "crawlee": "^3.10.1",
     "express": "^4.19.2",
-    "playwright": "^1.44.1",
+    "playwright": "^1.44.1"
   }
 }
