@@ -36,12 +36,7 @@ const initializeCrawler = async () => {
         }
       });
 
-      await Promise.race([
-        page.waitForLoadState(`networkidle`, { timeout: 3000 }),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("Timeout")), 10000),
-        ),
-      ]);
+      await sleep(2000)
 
       await page.evaluate(() => {
         return window.scrollBy(0, window.innerHeight);
