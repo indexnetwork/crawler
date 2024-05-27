@@ -1,4 +1,4 @@
-FROM apify/actor-node-puppeteer-chrome:latest
+FROM apify/actor-node-playwright:latest
 COPY package*.json ./
 COPY yarn.lock ./
 RUN yarn install
