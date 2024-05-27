@@ -23,13 +23,13 @@ const initializeCrawler = async () => {
     requestQueue,
     useSessionPool: true,
     persistCookiesPerSession: false,
-    headless: false,
+    headless: true,
     keepAlive: true,
     minConcurrency: 5,
     maxConcurrency: 30,
     requestHandler: async ({ request, page }) => {
-      await page.route('**/*', (route) => {
-        if (route.request().resourceType() === 'image') {
+      await page.route("**/*", (route) => {
+        if (route.request().resourceType() === "image") {
           route.abort();
         } else {
           route.continue();
