@@ -37,7 +37,7 @@ const initializeCrawler = async () => {
       });
 
       await Promise.race([
-        page.waitForNetworkIdle({ idleTime: 500, concurrency: 3 }),
+        page.waitForLoadState(`networkidle`, { timeout: 3000 }),
         new Promise((_, reject) =>
           setTimeout(() => reject(new Error("Timeout")), 10000),
         ),
