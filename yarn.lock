@@ -119,7 +119,7 @@
     tiny-typed-emitter "^2.1.0"
     tslib "^2.4.0"
 
-"@crawlee/browser@3.10.1":
+"@crawlee/browser@3.10.1", "@crawlee/browser@^3.10.1":
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/@crawlee/browser/-/browser-3.10.1.tgz#a7d5416a95b2accfbd751bbcbc8ff4808a09f901"
   integrity sha512-FgQbWQcIe787w8HhKYGjf4j3E64OmOJYkoKJa/KdWfSJ03PozAc3Bu8Kw1dSO8J0OOK8JpoBO5SnqazXcbjuzg==
@@ -252,7 +252,7 @@
     proper-lockfile "^4.1.2"
     tslib "^2.4.0"
 
-"@crawlee/playwright@3.10.1":
+"@crawlee/playwright@3.10.1", "@crawlee/playwright@^3.10.1":
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/@crawlee/playwright/-/playwright-3.10.1.tgz#874f8d375023a06ab5361ee457ac3415a7f143c8"
   integrity sha512-NjYlqSVJO31zwoKrjIgce23BYl1rs9+nLPAM9Ppf5fFtEgMPONRCrHSg8WzICXrqT3yX0vU2lxKLTF2qwBdsGQ==
@@ -1402,6 +1402,11 @@ fs-extra@^11.0.0, fs-extra@^11.2.0:
     jsonfile "^6.0.1"
     universalify "^2.0.0"
 
+fsevents@2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
+
 function-bind@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.2.tgz#2c02d864d97f3ea6c8830c464cbd11ab6eab7a1c"
@@ -2276,6 +2281,20 @@ pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+playwright-core@1.44.1:
+  version "1.44.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.44.1.tgz#53ec975503b763af6fc1a7aa995f34bc09ff447c"
+  integrity sha512-wh0JWtYTrhv1+OSsLPgFzGzt67Y7BE/ZS3jEqgGBlp2ppp1ZDj8c+9IARNW4dwf1poq5MgHreEM2KV/GuR4cFA==
+
+playwright@^1.44.1:
+  version "1.44.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.44.1.tgz#5634369d777111c1eea9180430b7a184028e7892"
+  integrity sha512-qr/0UJ5CFAtloI3avF95Y0L1xQo6r3LQArLIg/z/PoGJ6xa+EwzrwO5lpNr/09STxdHuUoP2mvuELJS+hLdtgg==
+  dependencies:
+    playwright-core "1.44.1"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 progress@2.0.3:
   version "2.0.3"

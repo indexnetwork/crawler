@@ -1,6 +1,6 @@
 import express from "express";
 import { Actor } from "apify";
-import { PuppeteerCrawler, RequestList, sleep } from "crawlee";
+import { PlaywrightCrawler, RequestList, sleep } from "crawlee";
 
 const app = express();
 const port = 3000;
@@ -18,29 +18,25 @@ const initializeCrawler = async () => {
   });
   const requestQueue = await Actor.openRequestQueue();
 
-  const crawler = new PuppeteerCrawler({
+  const crawler = new PlaywrightCrawler({
     requestList,
     requestQueue,
-    useSessionPool: false,
+    useSessionPool: true,
     persistCookiesPerSession: false,
     headless: true,
     keepAlive: true,
     minConcurrency: 5,
-    maxConcurrency: 15,
-    launchContext: {
-      launchOptions: {
-        defaultViewport: {
-          width: 1512,
-          height: 982,
-        },
-      },
-      userAgent:
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    },
+    maxConcurrency: 30,
     requestHandler: async ({ request, page }) => {
-      await page.waitForNavigation({ waitUntil: "load" });
+      await page.route("**/*", (route) => {
+        if (route.request().resourceType() === "image") {
+          route.abort();
+        } else {
+          route.continue();
+        }
+      });
 
-      await sleep(2000);
+      await sleep(2000)
 
       await page.evaluate(() => {
         return window.scrollBy(0, window.innerHeight);
